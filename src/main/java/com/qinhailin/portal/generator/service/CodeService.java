@@ -25,10 +25,12 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.kit.JavaKeyword;
 import com.jfinal.kit.Kv;
+import com.jfinal.kit.PropKit;
 import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.activerecord.dialect.OracleDialect;
 import com.jfinal.plugin.activerecord.generator.ColumnMeta;
 import com.jfinal.plugin.activerecord.generator.MetaBuilder;
 import com.jfinal.plugin.activerecord.generator.TableMeta;
@@ -82,11 +84,14 @@ public class CodeService{
 	 */
 	public Grid queryTablesList(Record record){	
 		MetaBuilder metaBuilder = new MetaBuilder(druidPlugin.getDataSource());
+		if("oracle".equals(PropKit.get("dbType"))){			
+			metaBuilder.setDialect(new OracleDialect());
+		}
 		// 添加不需要获取的数据表
 		String[] excTable={"sys_user","sys_org","sys_role","sys_function","sys_role_function","sys_user_role","sys_log","sys_tree","data_dictionary","data_dictionary_value","file_uploaded"};
 		metaBuilder.addExcludedTable(excTable);
 		// 实体名称去掉前缀
-		metaBuilder.setRemovedTableNamePrefixes("w_","t_");
+		metaBuilder.setRemovedTableNamePrefixes("w_","t_","W_","T_");
 		metaBuilder.setGenerateRemarks(true);
         // TableMeta 数据库的表
         List<TableMeta> tableMetas = metaBuilder.build();
@@ -111,6 +116,11 @@ public class CodeService{
         	   break;
         }
         
+        //oracle数据库
+        if("oracle".equals(PropKit.get("dbType"))){
+        	return new Grid(buildTableRemarksByOracle(resultList),tableMetas.size());
+        }
+        
         return new Grid(buildTableRemarks(resultList),tableMetas.size());
 	}
 	
@@ -125,6 +135,36 @@ public class CodeService{
 			Record rd=Db.find(sql,t.name).get(0);
 			t.remarks=rd.getStr("TABLE_COMMENT");
 		}
+		return tableMetaList;
+	}
+	
+	private List<TableMeta> buildTableRemarksByOracle(List<TableMeta> tableMetaList){
+		String sql="select ut.COLUMN_NAME,uc.COMMENTS,tc.COMMENTS TABLE_COMMENTS"
+			+" from user_tab_columns  ut"
+			+" inner JOIN user_col_comments uc"
+			+" on ut.TABLE_NAME  = uc.TABLE_NAME and ut.COLUMN_NAME = uc.COLUMN_NAME"
+			+" inner JOIN user_tab_comments tc"
+			+" on ut.TABLE_NAME = tc.TABLE_NAME"
+			+" where ut.TABLE_NAME=? ";
+		
+		for(TableMeta t:tableMetaList){
+			List<Record> list=Db.find(sql,t.name);
+			Record rd=list.get(0);
+			t.remarks=rd.getStr("TABLE_COMMENTS");
+			t.primaryKey=t.primaryKey.toLowerCase();
+			t.name=t.name.toLowerCase();
+			List<ColumnMeta> columnMetas=t.columnMetas;
+			columnMetas.forEach(column -> {
+				String name=column.name;
+				list.forEach(r->{
+					String columnName=r.getStr("COLUMN_NAME");
+					if(name.equals(columnName)){
+						column.remarks=r.getStr("COMMENTS");
+						column.name=name.toLowerCase();
+					}
+				});
+			});
+		}		
 		return tableMetaList;
 	}
 	
@@ -164,6 +204,7 @@ public class CodeService{
 			Iterator<Object> iter=kv.keySet().iterator();			
 			while(iter.hasNext()){
 				Object obj=iter.next();
+				System.out.println(obj);
 				content=content.replace("${"+obj+"}", kv.get(obj).toString());
 			}
 			result.set(str+".java", content);			
@@ -202,8 +243,8 @@ public class CodeService{
 			codeJava.add("Controller.java");
 		}
 				
-		result.set("codeJava", codeJava);
-		result.set("codeHtml", codeHtml);
+		result.set("codejava", codeJava);
+		result.set("codehtml", codeHtml);
 		
 		return result;
 	}

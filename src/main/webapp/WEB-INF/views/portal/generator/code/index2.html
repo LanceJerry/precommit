@@ -175,8 +175,8 @@ function getTable(data){
                     if (data.state == "ok") {
                     	success("代码生成成功");
                         codeData = data.data[0];
-                        var codeJava=codeData["codeJava"]||[];
-                        var codeHtml=codeData["codeHtml"]||[];
+                        var codeJava=codeData["codejava"]||[];
+                        var codeHtml=codeData["codehtml"]||[];
 						var btn1="",btn2="",checkbox1="",checkbox2="";
                         
                         codeJava.forEach(v=>{                            
@@ -202,7 +202,11 @@ function getTable(data){
                        	layui.form.render();
                        	layui.form.on('checkbox(code)', function(data){
 	                       	if (!$.isEmptyObject(codeData)) {
-	                            genCodeArea.setValue(codeData[data.value]);
+	                       		var strCode=codeData[data.value];
+		                       	if(strCode==null){
+		                       		strCode=codeData[data.value.toLocaleLowerCase()];
+			                    }		                       	
+	                            genCodeArea.setValue(strCode);
 	                            genCodeArea.setSize('auto', 'auto');                                                     
 	                        }
                        	});
@@ -216,8 +220,11 @@ function getTable(data){
                                     
                         $('#downloadAll').removeClass('layui-disabled');                        
                         $('#downloadAll').attr("disabled",false);
-                                          
-                       	genCodeArea.setValue(codeData[codeJava[0]||"Controller.java"]);
+                        var strCode=codeData[codeJava[0]];
+                        if(strCode==null){
+                      	  	strCode=codeData[codeJava[0].toLocaleLowerCase()];
+                        }
+                       	genCodeArea.setValue(strCode);
                        	genCodeArea.setSize('auto', 'auto');                       
                     } else {     
                     	$("#btnGroupJava").html("");

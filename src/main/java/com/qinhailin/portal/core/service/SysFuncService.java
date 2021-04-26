@@ -184,7 +184,7 @@ public class SysFuncService extends BaseService {
 	public Record getMenuInfo(String userCode,String menuId){
 		Record record=new Record();
 		String sql=Db.getSql("core.getUserFunctionTree");
-		Db.find(sql, userCode, menuId);
+
 		List<Record> topMenuList=Db.find(sql, userCode, "frame");
 		
 		String topMenuId=topMenuList.get(0).getStr("id");

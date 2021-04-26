@@ -84,7 +84,7 @@
 
 查询用户功能map集合,页面权限控制
 #sql("getUserFuncMap")
-    select rf.function_id from sys_role_function rf,sys_function sf where rf.role_code in (select ur.role_code from sys_user_role ur where ur.user_code=?) and rf.function_id=sf.id and sf.is_stop=0;  
+    select rf.function_id from sys_role_function rf,sys_function sf where rf.role_code in (select ur.role_code from sys_user_role ur where ur.user_code=?) and rf.function_id=sf.id and sf.is_stop=0
 #end
 
 ------------------------ SysRoleFuncService ----------------------------------------
