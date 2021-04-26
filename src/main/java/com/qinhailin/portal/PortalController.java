@@ -81,6 +81,7 @@ public class PortalController extends BaseController {
 			objectId = getVisitor().getCode();
 		}
 		setAttr("objectId", objectId);
+		setAttr("autoUpload",getPara(1));
 		render("common/upload/formUpload.html");
 	}
 	

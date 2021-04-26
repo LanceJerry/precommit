@@ -192,6 +192,6 @@
 
 <!-- 表单上传按钮-->
 #define formUploadButton(objectId,divId)
-	changeDivContent('#(path)/portal/toFormUpload/#(objectId)','#(divId)');
+	changeDivContent('#(path)/portal/toFormUpload/#(objectId)-#(autoUpload??false)','#(divId)');
 #end
 

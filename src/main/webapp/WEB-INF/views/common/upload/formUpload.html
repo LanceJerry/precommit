@@ -5,7 +5,7 @@
 	  <button type="button" class="layui-btn layui-btn-normal" id="fileList_#(objectId)">选择文件</button> 
 	  <button type="button" class="layui-btn layui-hide" id="fileListAction_#(objectId)">开始上传</button>
 	  <a href="javascript:" title="附件详情"><span id="fileNumber_#(objectId)" style="font-size: 18px;color:#424041"></span></a>
-	  <div class="layui-upload-list layui-hide" style="overflow-y:auto">
+	  <div class="layui-upload-list layui-hide" id="table_#(objectId)" style="overflow-y:auto">
 	    <table class="layui-table">
 	      <thead>
 	      	<tr>
@@ -33,6 +33,7 @@ layui.use(['upload','element'], function(){
 	  var allowUploadFile='.jpg .png .ico .gif .jpeg .xls .xlsx .doc .docx .pdf .ppt .pptx .txt .zip .rar .html .css';
 	  var allNum=0,fished=0;
 	  var start=false;
+	  var auto=#(autoUpload??false);//自动上传
 	 //进度条触发事件
 	  var active = {
 	   loading: function(othis){
@@ -49,8 +50,9 @@ layui.use(['upload','element'], function(){
 	    }
 	//计算触发事件
 	  ,fileNum:function(othis){
-			var timer = setInterval(function(){
-				$('#fileListAction_#(objectId)').removeClass('layui-hide');
+			var timer = setInterval(function(){	
+				if(!auto)
+					$('#fileListAction_#(objectId)').removeClass('layui-hide');								
 				$('#fileNumber_#(objectId)').html('('+fished+'/'+allNum+')');
 				if(fished==allNum&&allNum!=0){
 					 clearInterval(timer);
@@ -67,15 +69,15 @@ layui.use(['upload','element'], function(){
 			}
 	});
 
-		var n=0;
+		var n_#(objectId)=0;
 	//附件详情按钮
 	$('#fileNumber_#(objectId)').on('click', function(){
-	    if(n==0){
-	  		$('.layui-upload-list').removeClass('layui-hide');
-	  		n=1;
+	    if(n_#(objectId)==0){
+	  		$('#table_#(objectId)').removeClass('layui-hide');
+	  		n_#(objectId)=1;
 		}else{
-			$('.layui-upload-list').addClass('layui-hide');
-			n=0;
+			$('#table_#(objectId)').addClass('layui-hide');
+			n_#(objectId)=0;
 		}
 	});
 	  
@@ -86,7 +88,7 @@ layui.use(['upload','element'], function(){
 	  ,url: '#(path)/portal/upload/#(objectId??)'
 	  ,accept: 'file'
 	  ,multiple: true
-	  ,auto: false
+	  ,auto: auto
 	  ,bindAction: '#fileListAction_#(objectId)'
 	  ,choose: function(obj){   
 	    var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
