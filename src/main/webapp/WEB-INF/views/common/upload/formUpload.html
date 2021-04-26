@@ -2,9 +2,9 @@
 <div class="form_box">
 
 	<div class="layui-upload">
-	  <button type="button" class="layui-btn layui-btn-normal" id="fileList">选择文件</button> 
-	  <button type="button" class="layui-btn layui-hide" id="fileListAction">开始上传</button>
-	  <a href="javascript:" title="附件详情"><span id="fileNumber" style="font-size: 18px;color:#424041"></span></a>
+	  <button type="button" class="layui-btn layui-btn-normal" id="fileList_#(objectId)">选择文件</button> 
+	  <button type="button" class="layui-btn layui-hide" id="fileListAction_#(objectId)">开始上传</button>
+	  <a href="javascript:" title="附件详情"><span id="fileNumber_#(objectId)" style="font-size: 18px;color:#424041"></span></a>
 	  <div class="layui-upload-list layui-hide" style="overflow-y:auto">
 	    <table class="layui-table">
 	      <thead>
@@ -16,7 +16,7 @@
 		        <th>操作</th>
 	      	</tr>
 	      </thead>
-	      <tbody id="uploadList"></tbody>
+	      <tbody id="uploadList_#(objectId)"></tbody>
 	    </table>
 	  </div>
 	</div> 
@@ -50,8 +50,8 @@ layui.use(['upload','element'], function(){
 	//计算触发事件
 	  ,fileNum:function(othis){
 			var timer = setInterval(function(){
-				$('#fileListAction').removeClass('layui-hide');
-				$('#fileNumber').html('('+fished+'/'+allNum+')');
+				$('#fileListAction_#(objectId)').removeClass('layui-hide');
+				$('#fileNumber_#(objectId)').html('('+fished+'/'+allNum+')');
 				if(fished==allNum&&allNum!=0){
 					 clearInterval(timer);
 					 start=false;
@@ -61,7 +61,7 @@ layui.use(['upload','element'], function(){
 	  };
 
 	 //监听上传按钮
-	  $('#fileListAction').on('click', function(){
+	  $('#fileListAction_#(objectId)').on('click', function(){
 		  if(allNum>0){
 			    active['loading'].call(this, $(this));
 			}
@@ -69,7 +69,7 @@ layui.use(['upload','element'], function(){
 
 		var n=0;
 	//附件详情按钮
-	$('#fileNumber').on('click', function(){
+	$('#fileNumber_#(objectId)').on('click', function(){
 	    if(n==0){
 	  		$('.layui-upload-list').removeClass('layui-hide');
 	  		n=1;
@@ -80,14 +80,14 @@ layui.use(['upload','element'], function(){
 	});
 	  
 	//多文件列表示例
-	var demoListView = $('#uploadList')
+	var demoListView = $('#uploadList_#(objectId)')
 	,uploadListIns = upload.render({
-	  elem: '#fileList'
+	  elem: '#fileList_#(objectId)'
 	  ,url: '#(path)/portal/upload/#(objectId??)'
 	  ,accept: 'file'
 	  ,multiple: true
 	  ,auto: false
-	  ,bindAction: '#fileListAction'
+	  ,bindAction: '#fileListAction_#(objectId)'
 	  ,choose: function(obj){   
 	    var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
 	    //读取本地文件
