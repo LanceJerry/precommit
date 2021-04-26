@@ -33,7 +33,7 @@
 	              	#if(fileType=="jpg"||fileType=="png"||fileType=="jpeg"||fileType=="gif"||fileType=="ico"||fileType=="bmp")
 	              	<a href="javascript:reviewImg('#(data.url??)','#(data.file_name??)')" class="layui-btn layui-btn-xs" >预览</a>
 	              	#end
-	              	<a href="javascript:deleteFile('#(data.url??)','#(data.file_name??)')" class="layui-btn layui-btn-xs layui-btn-danger .demo-delete" >删除</a>
+	              	<a href="javascript:deleteFile('#(data.url??)','#(data.file_name??)','#(for.index)')" class="layui-btn layui-btn-xs layui-btn-danger .demo-delete" >删除</a>
 	              </td>
 	           </tr>
 	           #end
@@ -49,12 +49,12 @@
 #end
 #define js()
 <script type="text/javascript">
-	function deleteFile(url,fileName){
+	function deleteFile(url,fileName,num){
 		var url='#(path)/portal/delete/'+url;
 		layer.confirm('确定要删除 '+fileName+' 吗',{icon: 3, title:'提示'},function(index){
 			$.post(url,function(data){
-				setTimeout('window.location.reload()',500);
 				if(data.state=='ok'){
+					$('#upload-'+num).addClass('layui-hide');	
 				   layer.msg("删除成功",{icon:1});
 				}else{
 					layer.msg(data.msg||"附件不存在",{icon:2});

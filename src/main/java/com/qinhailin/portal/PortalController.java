@@ -80,8 +80,12 @@ public class PortalController extends BaseController {
 		if (objectId == null) {
 			objectId = getVisitor().getCode();
 		}
+		List<FileUploaded> fileList=getFileUploadListByObjectId(objectId);
 		setAttr("objectId", objectId);
 		setAttr("autoUpload",getPara(1));
+		setAttr("showDelBtn",getPara(2));
+		setAttr("fileList", fileList);
+		setAttr("fished",fileList.size());
 		render("common/upload/formUpload.html");
 	}
 	
@@ -94,8 +98,13 @@ public class PortalController extends BaseController {
 	public void upload() {
 		List<UploadFile> uploadList = getFiles();
 		String objectId = getPara() == null ? getPara("objectId") : getPara();
-		List<String> url = saveFiles(uploadList, objectId);		
-		renderJson(Ret.ok("url", url));	
+		List<String> url = saveFiles(uploadList, objectId);	
+		UploadFile uf=uploadList.get(0);
+		String fileName=uf.getFileName();
+		Ret ret=Ret.ok("url", url).set("fileName", fileName);
+		String fileType=fileName.substring(fileName.lastIndexOf(".")+1);
+		ret.set("fileType", fileType.toLowerCase());
+		renderJson(ret);	
 	}
 
 	/**

@@ -4,7 +4,7 @@
 	<div class="layui-upload">
 	  <button type="button" class="layui-btn layui-btn-normal" id="fileList_#(objectId)">选择文件</button> 
 	  <button type="button" class="layui-btn layui-hide" id="fileListAction_#(objectId)">开始上传</button>
-	  <a href="javascript:" title="附件详情"><span id="fileNumber_#(objectId)" style="font-size: 18px;color:#424041"></span></a>
+	  <a href="javascript:" title="附件详情"><span id="fileNumber_#(objectId)" style="font-size: 18px;color:#424041">(#(fished)/#(fished))</span></a>
 	  <div class="layui-upload-list layui-hide" id="table_#(objectId)" style="overflow-y:auto">
 	    <table class="layui-table">
 	      <thead>
@@ -16,7 +16,28 @@
 		        <th>操作</th>
 	      	</tr>
 	      </thead>
-	      <tbody id="uploadList_#(objectId)"></tbody>
+	      <tbody id="uploadList_#(objectId)">
+	      	#if(fileList)
+	           #for(data:fileList)
+	           <tr id="upload-#(for.index)">
+	              <td>#(for.index+1)</td>
+	              <td>#(data.file_name??)</td>
+	              <td>#number(data.file_size/1024.0,"#.#")KB</td>
+	              <td>#date(data.create_time??,"yyyy-MM-dd HH:mm:ss")</td>
+	              <td>
+	              	<a href="#(path)/portal/download/#(data.url??)" class="layui-btn layui-btn-xs">下载</a>
+	              	#set(fileType=data.file_name.substring(data.file_name.lastIndexOf(".")+1).toLowerCase())
+	              	#if(fileType=="jpg"||fileType=="png"||fileType=="jpeg"||fileType=="gif"||fileType=="ico"||fileType=="bmp")
+	              	<a href="javascript:reviewImg('#(data.url??)','#(data.file_name??)')" class="layui-btn layui-btn-xs" >预览</a>
+	              	#end
+	              	#if(showDelBtn=='true'||vs.code=='superadmin')
+	              	<a href="javascript:deleteFile('#(data.url??)','#(data.file_name??)','#(for.index)')" class="layui-btn layui-btn-xs layui-btn-danger .demo-delete" >删除</a>
+	             	#end
+	              </td>
+	           </tr>
+	           #end
+	       	   #end
+	      </tbody>
 	    </table>
 	  </div>
 	</div> 
@@ -26,12 +47,12 @@
 
 
 <script type="text/javascript">
-layui.use(['upload','element'], function(){
+//layui.use(['upload','element'], function(){
 	  var $ = layui.jquery
 	  ,element = layui.element
 	  ,upload = layui.upload;
 	  var allowUploadFile='.jpg .png .ico .gif .jpeg .xls .xlsx .doc .docx .pdf .ppt .pptx .txt .zip .rar .html .css';
-	  var allNum=0,fished=0;
+	  var allNum=#(fished??0),fished=#(fished??0);
 	  var start=false;
 	  var auto=#(autoUpload??false);//自动上传
 	 //进度条触发事件
@@ -145,7 +166,15 @@ layui.use(['upload','element'], function(){
 	      var tr = demoListView.find('tr#upload-'+ index)
 	      ,tds = tr.children();
 	      tds.eq(3).html('<span style="color: #5FB878;">上传成功</span>');
-	      tds.eq(4).html(''); //清空操作
+	      var url=res.url[0];
+	      var fileName=res.fileName;
+	      var fileType=res.fileType;
+	      var ht='<a href="#(path)/portal/download/'+url+'" class="layui-btn layui-btn-xs">下载</a>';
+	      if(fileType=="jpg"||fileType=="png"||fileType=="jpeg"||fileType=="gif"||fileType=="ico"||fileType=="bmp"){
+				ht+='<a href="javascript:reviewImg(\''+url+'\',\''+fileName+'\')" class="layui-btn layui-btn-xs" >预览</a>';
+		  }
+	      ht+='<a href="javascript:deleteFile(\''+url+'\',\''+fileName+'\')" class="layui-btn layui-btn-xs layui-btn-danger .demo-delete" >删除</a>'
+	      tds.eq(4).html(ht); //清空操作
 	      return delete this.files[index]; //删除文件队列已经上传成功的文件
 	    }
 	    this.error(index, upload);
@@ -158,6 +187,26 @@ layui.use(['upload','element'], function(){
 	  }
 	});
 
-});
+	function deleteFile(url,fileName,num){
+		var url='#(path)/portal/delete/'+url;
+		layer.confirm('确定要删除 '+fileName+' 吗',{icon: 3, title:'提示'},function(index){
+			$.post(url,function(data){
+				if(data.state=='ok'){
+					$('#upload-'+num).addClass('layui-hide');				
+					allNum--;fished--;
+					$('#fileNumber_#(objectId)').html('('+fished+'/'+allNum+')');	
+				   layer.msg("删除成功",{icon:1});
+				}else{
+					layer.msg(data.msg||"附件不存在",{icon:2});
+				}
+			});
+		});
+	}
+	
+	function reviewImg(url,fileName){
+		openDialog(fileName,'#(path)/portal/view/'+url,false,null,null,null);
+	}
+//});
+
 </script>
 
