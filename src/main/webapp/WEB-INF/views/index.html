@@ -225,17 +225,14 @@
 				    ,{
 				      title: '注销'
 				      ,id: 'logout'
+					  ,href:'#(path)/logout'
 				    }]
 				    ,click: function(data,othis){
 				         var id = data.id;
 				         var href=data.href;
-				         if(id=='logout'){
-							window.location.href="#(path)/logout";
-					     }else if(id=='passwd'){
+				         if(id=='passwd'){
 					    	 openDialog('修改密码','#(path)/portal/core/sysUser/myPassword?id='+userId,false,450,200,null);
-					     }else {
-					    	 window.location.href=href;
-						 }
+					     }
 				    }
 				  });
 			</script>
