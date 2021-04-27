@@ -149,7 +149,7 @@ body > .layui-container-fluid{
 /*顶部菜单导航*/
 .admin-nav-card > .layui-tab-title{
 	line-height: 40px;
-	padding:0 10px;
+	padding:0 0px;
 }
 .admin-nav-card > .layui-tab-title li {
     display: inline-block;
@@ -297,3 +297,22 @@ body > .layui-container-fluid{
 .admin-header-lock-input{
 	width: 150px; color: #FFFFFF; height: 30px; border: 0;background-color: #009688; padding: 0 7px; border-radius: 2px;
 }
+
+/*顶部tab切换样式调整*/ 
+#admin-body  .layui-tab .layui-tab-title li{ 
+	border-radius: 2px !important;margin-left:5px;font-size:13px;
+} 
+/*选中*/ 
+#admin-body  .layui-tab .layui-tab-title .layui-this{ 
+	border-radius: 2px !important; font-size:13px !important;font-weight:600;  margin-left:5px !important; 
+}
+
+
+
+/*列表部分调整*/
+#tablelist .layui-table td, .layui-table th {
+    font-size: 13px;
+}
+
+
+ 

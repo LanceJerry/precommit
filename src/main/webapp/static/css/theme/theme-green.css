@@ -53,3 +53,10 @@ form .task-row #searchBtn_{
     color: #fff !important;
 }
 .menu-this{background-color: #40ad71!important}
+
+
+.header .layui-nav-item a:hover{
+	background-color: #40ad71 !important;
+}
+
+

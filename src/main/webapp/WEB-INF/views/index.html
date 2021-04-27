@@ -37,6 +37,7 @@
 				</div>
 
 				<ul class="layui-nav admin-header-item">
+					<li class="layui-nav-item layui-hide-sm" id="moreMenu">#(vs.name??)<i class="layui-icon layui-icon-down"></i></li>
 					<li class="layui-nav-item" style="float:left">
 						#for(data:topMenuList)	
 							#if(data.is_window_open==1)
@@ -206,6 +207,37 @@
 			    		$("#themePopup").hide(200);
 			    	}
 			    }});
+
+			    layui.dropdown.render({
+				    elem: '#moreMenu'
+				    ,data: [
+				    #for(data:topMenuList)
+				    {
+				      title: '#(data.func_name??)'
+				      ,id: '#(data.id)'
+					  ,href:"#(path+'/?menuId='+data.id)"
+				    },
+				    #end
+				    {
+					   title: '修改密码'
+					   ,id: 'passwd'
+					}
+				    ,{
+				      title: '注销'
+				      ,id: 'logout'
+				    }]
+				    ,click: function(data,othis){
+				         var id = data.id;
+				         var href=data.href;
+				         if(id=='logout'){
+							window.location.href="#(path)/logout";
+					     }else if(id=='passwd'){
+					    	 openDialog('修改密码','#(path)/portal/core/sysUser/myPassword?id='+userId,false,450,200,null);
+					     }else {
+					    	 window.location.href=href;
+						 }
+				    }
+				  });
 			</script>
 	</div>
 </body>
