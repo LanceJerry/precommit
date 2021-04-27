@@ -152,7 +152,6 @@ public class CodeService{
 			Record rd=list.get(0);
 			t.remarks=rd.getStr("TABLE_COMMENTS");
 			t.primaryKey=t.primaryKey.toLowerCase();
-			t.name=t.name.toLowerCase();
 			List<ColumnMeta> columnMetas=t.columnMetas;
 			columnMetas.forEach(column -> {
 				String name=column.name;
