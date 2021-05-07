@@ -47,7 +47,9 @@
 
 
 <script type="text/javascript">
-//layui.use(['upload','element'], function(){
+//定义实例变量
+var allNum_#(objectId)=#(fished??0),fished_#(objectId)=#(fished??0);
+layui.use(['upload','element'], function(){
 	  var $ = layui.jquery
 	  ,element = layui.element
 	  ,upload = layui.upload;
@@ -75,6 +77,7 @@
 				if(!auto)
 					$('#fileListAction_#(objectId)').removeClass('layui-hide');								
 				$('#fileNumber_#(objectId)').html('('+fished+'/'+allNum+')');
+				allNum_#(objectId)=allNum;fished_#(objectId)=fished;
 				if(fished==allNum&&allNum!=0){
 					 clearInterval(timer);
 					 start=false;
@@ -187,14 +190,16 @@
 	  }
 	});
 
+});
+
 	function deleteFile(url,fileName,num){
 		var url='#(path)/portal/delete/'+url;
 		layer.confirm('确定要删除 '+fileName+' 吗',{icon: 3, title:'提示'},function(index){
 			$.post(url,function(data){
 				if(data.state=='ok'){
-					$('#upload-'+num).addClass('layui-hide');				
-					allNum--;fished--;
-					$('#fileNumber_#(objectId)').html('('+fished+'/'+allNum+')');	
+					$('#upload-'+num).addClass('layui-hide');			
+					allNum_#(objectId)--;fished_#(objectId)--;
+					$('#fileNumber_#(objectId)').html('('+fished_#(objectId)+'/'+allNum_#(objectId)+')');	
 				   layer.msg("删除成功",{icon:1});
 				}else{
 					layer.msg(data.msg||"附件不存在",{icon:2});
@@ -206,7 +211,6 @@
 	function reviewImg(url,fileName){
 		openDialog(fileName,'#(path)/portal/view/'+url,false,null,null,null);
 	}
-//});
 
 </script>
 
