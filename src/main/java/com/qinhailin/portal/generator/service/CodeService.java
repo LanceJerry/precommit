@@ -333,11 +333,11 @@ public class CodeService{
 		}
 		//下载所有代码
 		else{
-			listCode=record.get("codeJava");
+			listCode=record.get("codejava");
 			for(String str:listCode){
 				genratorKit.createJavaFile(className, str,record.getStr(str));
 			}
-			listCode=record.get("codeHtml");
+			listCode=record.get("codehtml");
 			for(String str:listCode){
 				genratorKit.createHtmlFile(className, str,record.getStr(str));				
 			}
