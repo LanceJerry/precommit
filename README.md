@@ -1,0 +1,1 @@
+test for golang pre-commit
