@@ -1,0 +1,22 @@
+
+2021-05-13 15:14:26[INFO]-[Thread: main]-[io.undertow.servlet.spec.ServletContextImpl.log()]: Initializing Spring root WebApplicationContext
+
+2021-05-13 15:14:26[INFO]-[Thread: main]-[org.springframework.web.context.ContextLoader.initWebApplicationContext()]: Root WebApplicationContext: initialization started
+
+2021-05-13 15:14:26[INFO]-[Thread: main]-[org.springframework.context.support.AbstractApplicationContext.prepareRefresh()]: Refreshing Root WebApplicationContext: startup date [Thu May 13 15:14:26 CST 2021]; root of context hierarchy
+
+2021-05-13 15:14:26[INFO]-[Thread: main]-[org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions()]: Loading XML bean definitions from ServletContext resource [/WEB-INF/applicationContext.xml]
+
+2021-05-13 15:14:27[INFO]-[Thread: main]-[org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions()]: Loading XML bean definitions from class path resource [ureport-core-context.xml]
+
+2021-05-13 15:14:27[INFO]-[Thread: main]-[org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions()]: Loading XML bean definitions from class path resource [ureport-font-context.xml]
+
+2021-05-13 15:14:28[INFO]-[Thread: main]-[org.springframework.web.context.ContextLoader.initWebApplicationContext()]: Root WebApplicationContext: initialization completed in 1302 ms
+
+2021-05-13 15:14:29[INFO]-[Thread: main]-[com.alibaba.druid.pool.DruidDataSource.init()]: {dataSource-1} inited
+
+2021-05-13 15:14:29[INFO]-[Thread: main]-[io.undertow.Undertow.start()]: starting server: Undertow - 2.0.32.Final
+
+2021-05-13 15:14:29[INFO]-[Thread: main]-[org.xnio.Xnio.<clinit>()]: XNIO version 3.3.8.Final
+
+2021-05-13 15:14:29[INFO]-[Thread: main]-[org.xnio.nio.NioXnio.<clinit>()]: XNIO NIO Implementation Version 3.3.8.Final
